@@ -1,0 +1,552 @@
+@import "pretty-checkbox/dist/pretty-checkbox.min.css";
+
+:root {
+  --title-bar-height: 22px;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: #1e1e1e;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+#root {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #2c3e50;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.draggable-title-bar {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: var(--title-bar-height);
+  width: 100%;
+  -webkit-app-region: drag;
+  pointer-events: none;
+}
+
+.main {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-bar {
+  z-index: 1000;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 22px;
+  width: 100%;
+  -webkit-app-region: drag;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  line-height: 22px;
+  pointer-events: none;
+}
+
+.nav-bar-left {
+  margin-left: 6px;
+  display: flex;
+}
+
+.nav-bar-right {
+  margin-left: auto;
+  display: flex;
+}
+
+.nav-bar-item {
+  margin-left: 10px;
+  pointer-events: auto;
+}
+
+.nav-bar-item-checkbox {
+  margin-left: 2px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-bar .pretty {
+  padding-top: 4px;
+  margin-left: 4px;
+}
+
+.nav-bar .pretty .state label:before,
+.nav-bar .pretty .state label:after {
+  top: 3px;
+}
+
+.nav-bar select {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+  border: 0;
+  margin: 0;
+  padding: 2px 4px;
+  background: none transparent;
+  border-radius: 4px;
+  box-sizing: content-box;
+}
+
+.nav-bar .nav-bar-item-checkbox {
+  margin-left: 12px;
+}
+
+.nav-bar-item-checkbox {
+  -webkit-app-region: no-drag;
+  pointer-events: auto;
+}
+
+.nav-bar select {
+  -webkit-app-region: no-drag;
+  pointer-events: auto;
+}
+
+.editor-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding-top: var(--title-bar-height);
+  padding-bottom: 22px;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+#editor {
+  width: 100%;
+  height: 100%;
+}
+
+.preferences {
+  position: fixed;
+  top: var(--title-bar-height);
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  z-index: 1001;
+  font-size: 12px;
+  padding: 12px 24px;
+  pointer-events: auto;
+}
+
+.preferences-inner {
+  height: 100%;
+  position: relative;
+}
+
+.preferences .header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.preferences h1 {
+  font-weight: 100;
+  font-size: 24px;
+  margin: 0 0 12px 0;
+}
+
+.preferences .form-group {
+  margin-bottom: 10px;
+}
+
+.preferences .select-group {
+  display: flex;
+}
+
+.preferences .select-group label {
+  width: 120px;
+}
+
+.preferences .app-version {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 12px;
+}
+
+.close {
+  opacity: 0.6;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  position: relative;
+}
+
+.close:hover {
+  opacity: 1;
+}
+
+.close:before,
+.close:after {
+  position: absolute;
+  left: 15px;
+  content: " ";
+  height: 33px;
+  width: 2px;
+  background-color: #333;
+}
+
+.close:before {
+  transform: rotate(45deg);
+}
+
+.close:after {
+  transform: rotate(-45deg);
+}
+
+.vim-status-bar {
+  white-space: nowrap;
+}
+
+.vim-status-bar > span {
+  margin-left: 2px;
+}
+
+.vim-status-bar > span:first-child {
+  margin-left: 0;
+}
+
+.vim-status-bar input[type="text"] {
+  background: transparent;
+  outline: 0;
+  border-style: none;
+}
+
+/* Theme styles */
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Light theme */
+.theme-light .draggable-title-bar {
+  background: linear-gradient(to top, #cccccc 0%, #d6d6d6 1px, #ebebeb 100%);
+}
+
+.theme-light .nav-bar {
+  color: #333;
+  background: linear-gradient(to top, #cccccc 0%, #d6d6d6 1px, #ebebeb 100%);
+  border-top: 1px solid #ddd;
+}
+
+.theme-light .nav-bar select {
+  color: #333;
+}
+
+.theme-light .preferences {
+  background-color: #fff;
+  color: #333;
+}
+
+.theme-light .vim-status-bar {
+  color: #333;
+}
+
+.theme-light .vim-status-bar input {
+  color: #333;
+}
+
+/* Dark theme */
+.theme-dark .draggable-title-bar {
+  background: #333;
+}
+
+.theme-dark .nav-bar {
+  color: #c1c1c1;
+  background: #333;
+  border-top: 1px solid #454545;
+}
+
+.theme-dark .nav-bar select {
+  color: #c1c1c1;
+}
+
+.theme-dark .preferences {
+  background-color: #222;
+  color: #fff;
+}
+
+.theme-dark .close:before,
+.theme-dark .close:after {
+  background-color: #fff;
+}
+
+.theme-dark .vim-status-bar {
+  color: #c1c1c1;
+}
+
+.theme-dark .vim-status-bar input {
+  color: #c1c1c1;
+}
+
+/* VSCode theme */
+.theme-vscode .draggable-title-bar {
+  background: #333;
+}
+
+.theme-vscode .nav-bar {
+  color: #fff;
+  background: #0077d5;
+  border-top: 1px solid #454545;
+}
+
+.theme-vscode .nav-bar select {
+  color: #fff;
+}
+
+.theme-vscode .preferences {
+  background-color: #222;
+  color: #fff;
+}
+
+.theme-vscode .close:before,
+.theme-vscode .close:after {
+  background-color: #fff;
+}
+
+.theme-vscode .vim-status-bar {
+  color: #fff;
+}
+
+.theme-vscode .vim-status-bar input {
+  color: #fff;
+}
+
+/* Dark Gradient theme */
+.theme-dark-grad .draggable-title-bar {
+  background: #333;
+}
+
+.theme-dark-grad .nav-bar {
+  color: #fff;
+  background: linear-gradient(
+    to right,
+    rgb(84, 51, 255),
+    rgb(0, 171, 255),
+    rgb(48, 217, 239)
+  );
+  border-top: 1px solid #454545;
+}
+
+.theme-dark-grad .nav-bar select {
+  color: #fff;
+}
+
+.theme-dark-grad .preferences {
+  background-color: #222;
+  color: #fff;
+}
+
+.theme-dark-grad .close:before,
+.theme-dark-grad .close:after {
+  background-color: #fff;
+}
+
+.theme-dark-grad .vim-status-bar {
+  color: #fff;
+}
+
+.theme-dark-grad .vim-status-bar input {
+  color: #fff;
+}
+
+/* Light Gradient theme */
+.theme-light-grad .draggable-title-bar {
+  background: linear-gradient(to top, #cccccc 0%, #d6d6d6 1px, #ebebeb 100%);
+}
+
+.theme-light-grad .nav-bar {
+  color: #333;
+  background: linear-gradient(
+    to right,
+    rgb(84, 51, 255),
+    rgb(0, 171, 255),
+    rgb(48, 217, 239)
+  );
+  border-top: 1px solid #ddd;
+}
+
+.theme-light-grad .nav-bar select {
+  color: #333;
+}
+
+.theme-light-grad .preferences {
+  background-color: #fff;
+  color: #333;
+}
+
+.theme-light-grad .vim-status-bar {
+  color: #333;
+}
+
+.theme-light-grad .vim-status-bar input {
+  color: #333;
+}
+
+/* Aesthetic theme */
+.theme-aesthetic .draggable-title-bar {
+  background: #333;
+}
+
+.theme-aesthetic .nav-bar {
+  color: #fff;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  border-top: 1px solid #454545;
+}
+
+.theme-aesthetic .nav-bar select {
+  color: #fff;
+}
+
+.theme-aesthetic .preferences {
+  background-color: #222;
+  color: #fff;
+}
+
+.theme-aesthetic .close:before,
+.theme-aesthetic .close:after {
+  background-color: #fff;
+}
+
+.theme-aesthetic .vim-status-bar {
+  color: #fff;
+}
+
+.theme-aesthetic .vim-status-bar input {
+  color: #fff;
+}
+
+/* Aesthetic Wave theme */
+.theme-aesthetic-wave .draggable-title-bar {
+  background: #333;
+}
+
+.theme-aesthetic-wave .nav-bar {
+  color: #fff;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  border-top: 1px solid #454545;
+  animation: Gradient 10s ease infinite;
+  background-size: 400% 400%;
+}
+
+.theme-aesthetic-wave .nav-bar select {
+  color: #fff;
+}
+
+.theme-aesthetic-wave .preferences {
+  background-color: #222;
+  color: #fff;
+}
+
+.theme-aesthetic-wave .close:before,
+.theme-aesthetic-wave .close:after {
+  background-color: #fff;
+}
+
+.theme-aesthetic-wave .vim-status-bar {
+  color: #fff;
+}
+
+.theme-aesthetic-wave .vim-status-bar input {
+  color: #fff;
+}
+
+/* Editaro theme */
+.theme-editaro .draggable-title-bar {
+  background: #333;
+}
+
+.theme-editaro .nav-bar {
+  color: #fff;
+  background: linear-gradient(to right, #ea27ff, #0069ff);
+  border-top: 1px solid #454545;
+}
+
+.theme-editaro .nav-bar select {
+  color: #fff;
+}
+
+.theme-editaro .preferences {
+  background-color: #222;
+  color: #fff;
+}
+
+.theme-editaro .close:before,
+.theme-editaro .close:after {
+  background-color: #fff;
+}
+
+.theme-editaro .vim-status-bar {
+  color: #fff;
+}
+
+.theme-editaro .vim-status-bar input {
+  color: #fff;
+}
+
+/* Editaro Wave theme */
+.theme-editaro-wave .draggable-title-bar {
+  background: #333;
+}
+
+.theme-editaro-wave .nav-bar {
+  color: #fff;
+  background: linear-gradient(to right, #ea27ff, #0069ff);
+  border-top: 1px solid #454545;
+  animation: Gradient 10s ease infinite;
+  background-size: 400% 400%;
+}
+
+.theme-editaro-wave .nav-bar select {
+  color: #fff;
+}
+
+.theme-editaro-wave .preferences {
+  background-color: #222;
+  color: #fff;
+}
+
+.theme-editaro-wave .close:before,
+.theme-editaro-wave .close:after {
+  background-color: #fff;
+}
+
+.theme-editaro-wave .vim-status-bar {
+  color: #fff;
+}
+
+.theme-editaro-wave .vim-status-bar input {
+  color: #fff;
+}
