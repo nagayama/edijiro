@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, Menu, clipboard, dialog, autoUpdater } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, Menu, clipboard } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -246,36 +246,7 @@ function createMenu(): void {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
 }
 
-// Auto updater setup
-function setupAutoUpdater(): void {
-  const isProduction = process.env.NODE_ENV === 'production'
-  
-  if (isProduction) {
-    autoUpdater.on('error', (err) => console.log(err))
-    autoUpdater.on('checking-for-update', () => console.log('checking-for-update'))
-    autoUpdater.on('update-available', () => console.log('update-available'))
-    autoUpdater.on('update-not-available', () => console.log('update-not-available'))
-    
-    autoUpdater.on('update-downloaded', () => {
-      console.log('update-downloaded')
-      const dialogIndex = dialog.showMessageBoxSync({
-        message: 'アップデートあり',
-        detail: '再起動してインストールできます。',
-        buttons: ['再起動', '後で']
-      })
-      if (dialogIndex === 0) {
-        autoUpdater.quitAndInstall()
-      }
-    })
-    
-    const server = 'https://hazel.editaro.com'
-    const feed = `${server}/update/${process.platform}/${app.getVersion()}`
-    autoUpdater.setFeedURL({ url: feed })
-    autoUpdater.checkForUpdates()
-  }
-}
 
 app.whenReady().then(() => {
   createWindow()
-  setupAutoUpdater()
 })
