@@ -14,6 +14,8 @@ export const Editor: React.FC = () => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
   const editorContainerRef = useRef<HTMLDivElement>(null)
   const copyHandlerRef = useRef<((e: ClipboardEvent) => void) | null>(null)
+  const cutHandlerRef = useRef<((e: ClipboardEvent) => void) | null>(null)
+  const pasteHandlerRef = useRef<((e: ClipboardEvent) => void) | null>(null)
 
   const persistedState = usePersistedStore()
   const setPersistedState = usePersistedStore.setState
@@ -69,7 +71,7 @@ export const Editor: React.FC = () => {
       })
     }
 
-    // Handle copy event
+    // Handle clipboard events
     const copyHandler = (e: ClipboardEvent) => {
       if (!editor.hasTextFocus()) return
       
@@ -82,8 +84,44 @@ export const Editor: React.FC = () => {
         }
       }
     }
+    
+    const cutHandler = (e: ClipboardEvent) => {
+      if (!editor.hasTextFocus()) return
+      
+      const selection = editor.getSelection()
+      if (selection && model) {
+        const selectedText = model.getValueInRange(selection)
+        if (selectedText) {
+          window.ipcRenderer.send('copy', selectedText)
+          editor.executeEdits('cut', [{
+            range: selection,
+            text: '',
+            forceMoveMarkers: true
+          }])
+          e.preventDefault()
+        }
+      }
+    }
+    
+    const pasteHandler = (e: ClipboardEvent) => {
+      if (!editor.hasTextFocus()) return
+      
+      const clipboardData = e.clipboardData
+      if (clipboardData) {
+        const text = clipboardData.getData('text/plain')
+        if (text) {
+          editor.trigger('keyboard', 'type', { text })
+          e.preventDefault()
+        }
+      }
+    }
+    
     copyHandlerRef.current = copyHandler
+    cutHandlerRef.current = cutHandler
+    pasteHandlerRef.current = pasteHandler
     document.addEventListener('copy', copyHandler)
+    document.addEventListener('cut', cutHandler)
+    document.addEventListener('paste', pasteHandler)
 
     // Focus the editor
     editor.focus()
@@ -91,6 +129,12 @@ export const Editor: React.FC = () => {
     return () => {
       if (copyHandlerRef.current) {
         document.removeEventListener('copy', copyHandlerRef.current)
+      }
+      if (cutHandlerRef.current) {
+        document.removeEventListener('cut', cutHandlerRef.current)
+      }
+      if (pasteHandlerRef.current) {
+        document.removeEventListener('paste', pasteHandlerRef.current)
       }
       // Dispose editor and clean up reference
       if (editorRef.current) {
