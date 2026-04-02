@@ -7,10 +7,12 @@ echo "Building Edijiro..."
 swift build -c release
 
 APP_DIR="Edijiro.app/Contents/MacOS"
-mkdir -p "$APP_DIR"
+RES_DIR="Edijiro.app/Contents/Resources"
+mkdir -p "$APP_DIR" "$RES_DIR"
 
 cp .build/release/Edijiro "$APP_DIR/Edijiro"
 cp Sources/Edijiro/Info.plist Edijiro.app/Contents/Info.plist
+cp Resources/Edijiro.icns "$RES_DIR/Edijiro.icns"
 
 echo ""
 echo "Built: $(pwd)/Edijiro.app"

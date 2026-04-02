@@ -12,6 +12,8 @@
 	<string>Edijiro</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>14.0</string>
+	<key>CFBundleIconFile</key>
+	<string>Edijiro</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 </dict>
