@@ -5,6 +5,8 @@ struct PreferencesView: View {
     @AppStorage("edijiro-fontSize") private var fontSize: Double = 13
     @AppStorage("edijiro-fontFamily") private var fontFamily: String = ""
 
+    private static let fontSizeRange: ClosedRange<Double> = 10...40
+
     private static let fontFamilies: [String] = {
         let manager = NSFontManager.shared
         return manager.availableFontFamilies.sorted()
@@ -19,9 +21,20 @@ struct PreferencesView: View {
             }
             .pickerStyle(.segmented)
 
-            HStack {
-                Text("Font Size: \(Int(fontSize))px")
-                Slider(value: $fontSize, in: 10...40, step: 1)
+            LabeledContent("Font Size") {
+                HStack(spacing: 4) {
+                    TextField("", value: $fontSize, format: .number)
+                        .labelsHidden()
+                        .multilineTextAlignment(.trailing)
+                        .frame(width: 48)
+                    Stepper("", value: $fontSize, in: Self.fontSizeRange, step: 1)
+                        .labelsHidden()
+                    Text("px")
+                }
+            }
+            .onChange(of: fontSize) { _, newValue in
+                let clamped = min(max(newValue.rounded(), Self.fontSizeRange.lowerBound), Self.fontSizeRange.upperBound)
+                if clamped != newValue { fontSize = clamped }
             }
 
             Picker("Font Family", selection: $fontFamily) {
